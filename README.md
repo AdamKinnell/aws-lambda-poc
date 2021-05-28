@@ -19,7 +19,7 @@
 1. Run `serverless invoke local --function hello`
 
 ### Testing in AWS
-1. Login to AWS cli with a user that has permission to deploy the serverless application (Assigned the 'AdministratorAccess' role).
+1. Login to AWS cli with a user that has permission to deploy the serverless application with `aws configure`.
 2. Run `serverless deploy` and note the `endpoints` section in the command output.
 3. Access the HTTP GET endpoint of the Lambda.
 
@@ -42,6 +42,7 @@ Once the application is deployed
 + This application does not need to access any external resources.
 + This is not a business-critical application that requires high availability.
 + The application will be monitored by a single team with a single set of privileges.
++ The application only needs to be deployed to a single region.
 
 ## Future work and considerations
 + Use more restrictive IAM roles for deployment.
