@@ -29,8 +29,8 @@ Run `serverless remove` to remove all resources when finished testing.
 Changes pushed to the master branch will be automatically deployed using serverless and Github Actions.
 
 If forking this repository, you must add two new Secrets to the repository to enable CD.
-+ AWS_ACCESS_KEY_ID
-+ AWS_SECRET_ACCESS_KEY
++ `AWS_ACCESS_KEY_ID`
++ `AWS_SECRET_ACCESS_KEY`
 
 The AWS user must have permissions to deploy the application and associated resources.
 
@@ -41,6 +41,7 @@ Once the application is deployed
 + There is no state in the application.
 + This application does not need to access any external resources.
 + This is not a business-critical application that requires high availability.
++ The application will be monitored by a single team with a single set of privileges.
 
 ## Future work and considerations
 + Use more restrictive IAM roles for deployment.
@@ -48,4 +49,4 @@ Once the application is deployed
 + Investigate incremental rollout of new Lambda code versions.
 + Investigate scaling of Lambda to determine max number of requests
 + Support rollout to multiple environments, such as staging or prod.
-+ Support automatic rollbacks in case of issues with the new application version
++ Support automatic rollbacks in case of issues after a new deployment.
