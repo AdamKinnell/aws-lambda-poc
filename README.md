@@ -60,7 +60,7 @@ Users assigned to this role can:
 + View the application source code package.
 
 They cannot:
-+ Make changes to any resources (including making changes to provisioned concurreny).
++ Make changes to any resources (including making changes to provisioned concurrency).
 + Deploy new code through the AWS Console.
 
 Any changes must follow the CI process after a merged commit to the `master` branch.
