@@ -43,7 +43,7 @@ If forking this repository, you must add two new Secrets to the repository to en
 
 The AWS user must have permissions to deploy the application and associated resources. The `AccountAdministrator` role is sufficient, if excessive.
 
-You may delete the `dev` and `prod` CloudFormation stacks in `ap-southeast-2` to remove all resources deployed by the pipeline.
+You may delete the `aws-node-project-dev` CloudFormation stack in `ap-southeast-2` to remove all resources deployed by the pipeline.
 
 ## Usage
 The `serverless deploy (*)` step of the CD pipeline in GitHub actions will display the endpoint of the deployed application. e.g. https://cy592jwa81.execute-api.ap-southeast-2.amazonaws.com/dev/hello.
@@ -75,16 +75,12 @@ Any changes must follow the CI process after a merged commit to the `master` bra
 + There is no authentication required to access the public GET api.
 + The GET api should be accessible from the internet.
 
-## TODO
-+ Add email alerts for high server error rate (500s).
-+ Add documentation for monitoring: login, logs, alerts, metrics.
-
 ## Future work and considerations
-+ Add a custom domain name for accessing the API, rather then the one it automatically generates (e.g. "https://cy592jwa81.execute-api.ap-southeast-2.amazonaws.com/dev/hello")/
++ Add a custom domain name for accessing the API, rather then the one it automatically generates (e.g. https://cy592jwa81.execute-api.ap-southeast-2.amazonaws.com/dev/hello)
 + Use more restrictive IAM roles for deployment, rather than `AccountAdministrator`. We do require the ability to create custom IAM roles though which is a highly privileged operation, so our options for restricting privilege escalation vectors may be limited.
 + Verify that IAM roles assigned to the Lambda are minimally-privileged.
 + Restrict permissions assigned to the `HelloOperatorsPolicy` further in line with the principle of least privilege.
-+ Look at automatically rolling back cloudformation if health check fails within `n` minutes after deployment.
++ Look at automatically rolling back CloudFormation if health check fails within `n` minutes after deployment.
 + Investigate scaling of Lambda to determine max number of requests and associated latency.
 + Consider using [Application Auto Scaling](https://docs.aws.amazon.com/lambda/latest/dg/invocation-scaling.html) to automatically provision standby instances in response to burst load and therefore reduce average latency in such situations.
 + Add code linter and analysis for all PRs.
