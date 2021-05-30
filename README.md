@@ -79,7 +79,7 @@ Any changes must follow the CI process after a merged commit to the `master` bra
 + Add a custom domain name for accessing the API, rather then the one it automatically generates (e.g. https://cy592jwa81.execute-api.ap-southeast-2.amazonaws.com/dev/hello)
 + Use more restrictive IAM roles for deployment, rather than `AccountAdministrator`. We do require the ability to create custom IAM roles though which is a highly privileged operation, so our options for restricting privilege escalation vectors may be limited.
 + Verify that IAM roles assigned to the Lambda are minimally-privileged.
-+ Restrict permissions assigned to the `HelloOperatorsPolicy` further in line with the principle of least privilege.
++ Restrict permissions assigned to the `HelloOperatorsPolicy` further in line with the principle of least privilege. The role should only have monitoring access to this application.
 + Look at automatically rolling back CloudFormation if health check fails within `n` minutes after deployment.
 + Investigate scaling of Lambda to determine max number of requests and associated latency.
 + Consider using [Application Auto Scaling](https://docs.aws.amazon.com/lambda/latest/dg/invocation-scaling.html) to automatically provision standby instances in response to burst load and therefore reduce average latency in such situations.
