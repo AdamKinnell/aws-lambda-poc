@@ -3,6 +3,9 @@ service: aws-node-project
 frameworkVersion: '2'
 configValidationMode: error
 
+plugins:
+ - serverless-manifest-plugin
+
 provider:
   name: aws
   runtime: nodejs14.x

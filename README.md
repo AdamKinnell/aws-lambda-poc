@@ -81,3 +81,4 @@ Any changes must follow the CI process after a merged commit to the `master` bra
 + Create a Dashboard in CloudWatch which shows both infrastructure (Lambda) and application (API Gateway + CloudWatch Logs).
 + Don't include README.md in the package uploaded to Lambda.
 + Add probes to test api health with CloudWatch Synthetics.
++ Add alerts for: high request latency, application errors, and 500 server errors. Need to determine appropriate thresholds.
