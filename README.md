@@ -2,12 +2,22 @@
 
 ## Overview
 
+This repo contains a single Lambda function with a public GET API to test an automated deployment of a simple application to AWS.
+
+Technologies used include:
++ AWS (for hosting the application and all resources)
++ node.js (for application code)
++ Lambda (for hosting application code)
++ Serverless (for deploying application code and infrastructure)
++ CloudFormation (for deploying additional AWS resources outside of Serverless)
++ Github Actions (for CI/CD)
+
 ## Development
 
 ### Prerequisites
 + Install [node.js 14.17.0](https://nodejs.org/en/)  
-  `cinst nvm -y` with Chocolatey
-  `nvm install 14.17.0`
+  `cinst nvm -y` with Chocolatey  
+  `nvm install 14.17.0`  
   `nvm use 14.17.0`
 + Install [serverless](https://github.com/serverless/serverless)  
   `npm install -g serverless`
@@ -35,6 +45,11 @@ The AWS user must have permissions to deploy the application and associated reso
 
 You may delete the `dev` and `prod` CloudFormation stacks in `ap-southeast-2` to remove all resources deployed by the pipeline.
 
+## Usage
+The `serverless deploy (*)` step of the CD pipeline in GitHub actions will display the endpoint of the deployed application. e.g. https://cy592jwa81.execute-api.ap-southeast-2.amazonaws.com/dev/hello.
+
+You can access the endpoint though any web browser.
+
 ## Monitoring
 Once the application is deployed, you can assign IAM users access to monitor the application by adding them to the `aws-node-project-(dev|prod)-HelloOperators-*` user group which is automatically provisioned.
 
@@ -46,7 +61,7 @@ Users assigned to this role can:
 
 They cannot:
 + Make changes to any resources (including making changes to provisioned concurreny).
-+ Deploy new code.
++ Deploy new code through the AWS Console.
 
 Any changes must follow the CI process after a merged commit to the `master` branch.
 
@@ -65,7 +80,7 @@ Any changes must follow the CI process after a merged commit to the `master` bra
 + Add documentation for monitoring: login, logs, alerts, metrics.
 
 ## Future work and considerations
-+ Add a custom domain name for accessing the API, rather then the one it automatically generates (e.g. "https://q4epyanwsk.execute-api.ap-southeast-2.amazonaws.com/dev/hello")/
++ Add a custom domain name for accessing the API, rather then the one it automatically generates (e.g. "https://cy592jwa81.execute-api.ap-southeast-2.amazonaws.com/dev/hello")/
 + Use more restrictive IAM roles for deployment, rather than `AccountAdministrator`. We do require the ability to create custom IAM roles though which is a highly privileged operation, so our options for restricting privilege escalation vectors may be limited.
 + Verify that IAM roles assigned to the Lambda are minimally-privileged.
 + Restrict permissions assigned to the `HelloOperatorsPolicy` further in line with the principle of least privilege.
@@ -79,6 +94,6 @@ Any changes must follow the CI process after a merged commit to the `master` bra
 + Allow seperate credentials in CI/CD pipeline for dev and production deployments.
 + Create a Dashboard in CloudWatch which shows both infrastructure (Lambda) and application (API Gateway + CloudWatch Logs).
 + Don't include README.md in the package uploaded to Lambda.
-+ Add probes to test api health with CloudWatch Synthetics.
-+ Add alerts for: high request latency, application errors, and 500 server errors. Need to determine appropriate thresholds.
++ Add probes to periodically test api health with CloudWatch Synthetics.
++ Add alerts/alarms for: high request latency, application errors, and 500 server errors. Need to determine appropriate thresholds.
 + Add seperate dev and prod deployment stages with appropriate deployment validation before progressing to the next stage.
