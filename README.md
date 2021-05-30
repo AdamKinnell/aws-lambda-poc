@@ -63,7 +63,6 @@ Any changes must follow the CI process after a merged commit to the `master` bra
 ## TODO
 + Add email alerts for high server error rate (500s).
 + Add documentation for monitoring: login, logs, alerts, metrics.
-+ Add application health check that must pass before proceeding to production
 
 ## Future work and considerations
 + Add a custom domain name for accessing the API, rather then the one it automatically generates (e.g. "https://q4epyanwsk.execute-api.ap-southeast-2.amazonaws.com/dev/hello")/
@@ -82,3 +81,4 @@ Any changes must follow the CI process after a merged commit to the `master` bra
 + Don't include README.md in the package uploaded to Lambda.
 + Add probes to test api health with CloudWatch Synthetics.
 + Add alerts for: high request latency, application errors, and 500 server errors. Need to determine appropriate thresholds.
++ Add seperate dev and prod deployment stages with appropriate deployment validation before progressing to the next stage.
