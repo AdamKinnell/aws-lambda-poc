@@ -1,6 +1,7 @@
 service: aws-node-project
 
 frameworkVersion: '2'
+configValidationMode: error
 
 provider:
   name: aws
@@ -12,3 +13,46 @@ functions:
     handler: handler.hello
     events:
       - http: GET /hello
+
+# Add additional CloudFormation resources
+resources:
+  Resources:
+    HelloOperators:
+      # Group will be named `aws-node-project-(dev|prod)-HelloOperators-*``
+      Type: 'AWS::IAM::Group'
+      Properties:
+        ManagedPolicyArns:
+        - !Ref HelloOperatorsPolicy
+
+    HelloOperatorsPolicy:
+      Type: AWS::IAM::ManagedPolicy
+      Properties: 
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Action:
+            # Cloudwatch
+            - autoscaling:Describe*
+            - cloudwatch:Describe*
+            - cloudwatch:Get*
+            - cloudwatch:List*
+            - logs:Get*
+            - logs:List*
+            - logs:StartQuery
+            - logs:StopQuery
+            - logs:Describe*
+            - logs:TestMetricFilter
+            - logs:FilterLogEvents
+            - sns:Get*
+            - sns:List*
+            # Api Gateway
+            - apigateway:Get*
+            # Lambda
+            - cloudformation:DescribeStacks
+            - cloudformation:ListStackResources
+            - cloudformation:DescribeStackEvents
+            - lambda:Get*
+            - lambda:List*
+            - lambda:Describe*
+            Effect: Allow
+            Resource: "*"

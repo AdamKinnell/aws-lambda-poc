@@ -35,32 +35,46 @@ If forking this repository, you must add two new Secrets to the repository to en
 The AWS user must have permissions to deploy the application and associated resources. The `AccountAdministrator` role is sufficient, if excessive.
 
 ## Monitoring
-Once the application is deployed
+Once the application is deployed, you can assign IAM users access to monitor the application by adding them to the `aws-node-project-(dev|prod)-HelloOperators-*` user group which is automatically provisioned.
 
-TODO:
-`#https://signin.aws.amazon.com/switchrole?account=your_account_ID_or_alias&roleName=optional_path/role_name`
+Users assigned to this role can:
++ View logs from the application sent to CloudWatch.
++ View metrics and dashboards for the API Gateway and Lambda function.
++ View CloudFormation deployment history.
++ View the application source code package.
+
+They cannot:
++ Make changes to any resources.
++ Deploy new code. Any code changes must follow the CI process after a merged commit to the `master` branch.
 
 ## Assumptions
 + There is no state in the application.
-+ This application does not need to access any external resources.
++ The application does not need to access any external resources.
 + This is not a business-critical application that requires high availability.
 + The application will be monitored by a single team with a single set of privileges.
 + The application only needs to be deployed to a single region.
++ The application is used infrequently with an expected average request rate of 1 request per minute.
++ There is no authentication required to access the public GET api.
++ The GET api should be accessible from the internet.
 
 ## TODO
-+ Add IAM role that operators can use for monitoring the system. Not allowed to redeploy/modify code.
-+ Add ability for users to assume the operator role.  
-https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_permissions-to-switch.html
 + Add synthetic load / probes to test api health.
 + Add email alerts for high server error rate (500s).
 + Look at automatically rolling back cloudformation if health check fails within `n` minutes after deployment.
 + Add documentation for monitoring: login, logs, alerts, metrics.
++ Add application health check that must pass before proceeding to production
 
 ## Future work and considerations
 + Add a custom domain name for accessing the API, rather then the one it automatically generates (e.g. "https://q4epyanwsk.execute-api.ap-southeast-2.amazonaws.com/dev/hello")/
 + Use more restrictive IAM roles for deployment, rather than `AccountAdministrator`. We do require the ability to create custom IAM roles though which is a highly privileged operation, so our options for restricting privilege escalation vectors may be limited.
 + Verify that IAM roles assigned to the Lambda are minimally-privileged.
-+ Support rollout to multiple environments, such as staging or production.
++ Restrict permissions assigned to the `HelloOperatorsPolicy` further in line with the principle of least privilege.
 + Support automatic rollbacks in case of issues after a new deployment.
 + Investigate scaling of Lambda to determine max number of requests and associated latency.
 + Consider using [Application Auto Scaling](https://docs.aws.amazon.com/lambda/latest/dg/invocation-scaling.html) to automatically provision standby instances in response to burst load and therefore reduce average latency in such situations.
++ Add code linter and analysis for all PRs.
++ Add automated tests for the application (once it actually does something :P)
++ Add automated tests for the entire infrastructure. e.g. Upon PR, we spin up a full environment, run tests, and then tear it down. That way we can be confident that anything in `master` has been fully tested and working.
++ Refactor CloudFormation templates in serverless.yml into multiple files rather than declaring them inline.
++ Allow seperate credentials in CI/CD pipeline for dev and production deployments.
++ Create a Dashboard in CloudWatch which shows both infrastructure (Lambda) and application (API Gateway + Cloudwatch Logs).
