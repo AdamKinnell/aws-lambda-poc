@@ -18,11 +18,20 @@ jobs:
         with:
           node-version: 14.x
 
-      # Deploy new version
+      # Deploy new version to dev
       - name: serverless deploy
         uses: serverless/github-action@master
         with:
-          args: deploy --region ${{ matrix.region }}
+          args: deploy --region ${{ matrix.region }} --stage dev
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      # Deploy new version to prod (if dev was successful)
+      - name: serverless deploy
+        uses: serverless/github-action@master
+        with:
+          args: deploy --region ${{ matrix.region }} --stage prod
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
