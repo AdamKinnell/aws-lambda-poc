@@ -17,6 +17,7 @@ functions:
 # Add additional CloudFormation resources
 resources:
   Resources:
+
     HelloOperators:
       # Group will be named `aws-node-project-(dev|prod)-HelloOperators-*``
       Type: 'AWS::IAM::Group'

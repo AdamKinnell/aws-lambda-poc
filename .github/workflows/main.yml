@@ -19,7 +19,7 @@ jobs:
           node-version: 14.x
 
       # Deploy new version to dev
-      - name: serverless deploy
+      - name: serverless deploy (dev)
         uses: serverless/github-action@master
         with:
           args: deploy --region ${{ matrix.region }} --stage dev
@@ -27,8 +27,19 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+      # Verify that the public GET endpoint is up
+      - name: Verify that the API is up and working
+        run: |
+          API_URL=$(serverless info --region ${{ matrix.region }} --stage dev | grep "GET - ") | grep -o 'https://.*'
+          RESPONSE_CODE=$(curl "$API_URL" -o /dev/null --silent --write-out '%{http_code}' || exit 1)
+          if [ $RESPONSE_CODE -ne "200" ]; then
+            echo "API in dev did not return successful response after deployment: $RESPONSE_CODE"
+            exit 1;
+          fi
+        shell: bash
+
       # Deploy new version to prod (if dev was successful)
-      - name: serverless deploy
+      - name: serverless deploy (prod)
         uses: serverless/github-action@master
         with:
           args: deploy --region ${{ matrix.region }} --stage prod
