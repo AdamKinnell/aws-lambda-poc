@@ -32,7 +32,7 @@ Technologies used include:
 2. Run `serverless deploy --region ap-southeast-2 --stage localdev` and note the `endpoints` section in the command output.
 3. Access the HTTP GET endpoint of the Lambda.
 
-Run `serverless remove --region ap-southeast-2 --stage localdev` to remove all resources when finished testing. You may also 
+Run `serverless remove --region ap-southeast-2 --stage localdev` to remove all resources when finished testing.
 
 ## Deployment (CI/CD)
 Changes pushed to the master branch will be automatically deployed using serverless and Github Actions.
